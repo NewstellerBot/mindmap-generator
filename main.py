@@ -8,8 +8,7 @@ from tika import parser
 
 from langchain.text_splitter import CharacterTextSplitter
 
-# openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
-openai_api_key = "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"
+openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 
 if openai_api_key.startswith("sk-"):
     map_reduce_chain, mind_map_chain = setup_chains(openai_api_key)
