@@ -1,0 +1,7 @@
+langchain
+openai
+streamlit
+tika
+tiktoken
+trafilatura
+watchdog
