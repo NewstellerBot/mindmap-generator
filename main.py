@@ -77,6 +77,7 @@ st.markdown(
     "# Mind Map Generator \n Use an article url or upload a pdf/txt file and generate the summary and mindmap for the text."
 )
 
+
 with st.form("mind_map_form"):
     url = st.text_input("Enter url of the article")
     st.write("or drop a file")
@@ -90,39 +91,43 @@ with st.form("mind_map_form"):
     if not openai_api_key.startswith("sk-"):
         st.warning("Please enter your Open API key in side bar!", icon="⚠️")
 
-    if submitted:
-        if url and file:
-            st.warning("Please enter only one of url or file!", icon="⚠️")
-            st.stop()
+    try:
+        if submitted:
+            if url and file:
+                st.warning("Please enter only one of url or file!", icon="⚠️")
+                st.stop()
 
-        # create a variable for the content of pdf/article
-        content = None
-        # create a variable for summary
-        summary = None
+            # create a variable for the content of pdf/article
+            content = None
+            # create a variable for summary
+            summary = None
 
-        # if url was provided
-        if url:
-            content = get_content_from_url(url)
-        # if file was provided
-        elif file:
-            content = parse_file(file)
-        else:
-            st.warning("Please enter a url or pdf!", icon="⚠️")
-            st.stop()
+            # if url was provided
+            if url:
+                content = get_content_from_url(url)
+            # if file was provided
+            elif file:
+                content = parse_file(file)
+            else:
+                st.warning("Please enter a url or pdf!", icon="⚠️")
+                st.stop()
 
-        # create summary and mindmap
-        if content:
-            summary = create_summary(content)
+            # create summary and mindmap
+            if content:
+                summary = create_summary(content)
 
-        if summary:
-            # display summary
-            st.markdown("## Summary")
-            st.write(summary)
+            if summary:
+                # display summary
+                st.markdown("## Summary")
+                st.write(summary)
 
-            # get mindmap code
-            mindmap = create_mindmap(summary)
+                # get mindmap code
+                mindmap = create_mindmap(summary)
 
-            if mindmap:
-                # display img from mermaid
-                st.markdown("## Mindmap")
-                st.image(f"http://mermaid.ink/img/{encode(mindmap)}")
+                if mindmap:
+                    # display img from mermaid
+                    st.markdown("## Mindmap")
+                    st.image(f"http://mermaid.ink/img/{encode(mindmap)}")
+
+    except Exception as e:
+        st.error(e)
